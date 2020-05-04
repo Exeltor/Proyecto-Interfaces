@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:starlite/constants/styles.dart';
 import 'package:starlite/widgets/rounded_black_button.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -6,32 +7,40 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dimensions = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: const Text('Inicio de Sesión')),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Image.asset(
-              'assets/StarLiteLogo.png',
-            ),
-          ),
-          Expanded(
-            child: Container(
+      appBar: AppBar(
+        title: const Text('Inicio de Sesión'),
+      ),
+      extendBodyBehindAppBar: true,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(235, 235, 235, 1),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black54,
-                    blurRadius: 10,
-                  ),
-                ],
+              height: dimensions.height / 2,
+              child: Image.asset(
+                'assets/StarLiteLogo.png',
               ),
-              child: SingleChildScrollView(
+            ),
+            Container(
+              width: double.infinity,
+              height: dimensions.height / 2,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(235, 235, 235, 1),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -56,6 +65,26 @@ class LoginScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    TextField(
+                                      decoration: kInputFieldStyle.copyWith(
+                                        labelText: 'Email',
+                                        prefixIcon: Icon(Icons.mail),
+                                      ),
+                                    ),
+                                    TextField(
+                                      decoration: kInputFieldStyle.copyWith(
+                                        labelText: 'Contraseña',
+                                        prefixIcon: Icon(Icons.vpn_key),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                           Expanded(
@@ -76,8 +105,8 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

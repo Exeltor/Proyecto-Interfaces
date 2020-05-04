@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:starlite/screens/login_screen.dart';
+import 'package:starlite/screens/recovery_screen.dart';
+import 'package:starlite/screens/signup_screen.dart';
 import 'package:starlite/widgets/rounded_black_button.dart';
 
 class StartScreen extends StatelessWidget {
@@ -25,14 +27,14 @@ class StartScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               RoundedBlackButton(
-                onTap: () {},
+                onTap: () => Navigator.of(context).pushNamed(SignupScreen.routeName),
                 child: const Text(
                   'Registro',
                   style: const TextStyle(color: Colors.white, fontSize: 20),
                 ),
               ),
               FlatButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).pushNamed(RecoveryScreen.routeName),
                 child: Text('Recuperar contraseña'),
               ),
             ],

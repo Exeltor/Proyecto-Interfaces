@@ -10,6 +10,9 @@ class RoundedBlackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 200,
+      constraints: BoxConstraints(
+        maxWidth: 200
+      ),
       height: 70,
       child: Material(
         borderRadius: BorderRadius.circular(20),
