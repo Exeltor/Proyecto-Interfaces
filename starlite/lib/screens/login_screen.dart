@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:starlite/constants/styles.dart';
+import 'package:starlite/providers/data.dart';
 import 'package:starlite/widgets/rounded_black_button.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = "loginScreen";
+  final GlobalKey<FormState> _form = GlobalKey<FormState>();
+
+  _validateAndSubmit(BuildContext context) {
+    if(!this._form.currentState.validate()) return;
+
+    Navigator.of(context).pop();
+    Provider.of<DataProvider>(context, listen: false).login();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,23 +76,39 @@ class LoginScreen extends StatelessWidget {
                                 ],
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    TextField(
-                                      decoration: kInputFieldStyle.copyWith(
-                                        labelText: 'Email',
-                                        prefixIcon: Icon(Icons.mail),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Form(
+                                  key: _form,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      TextFormField(
+                                        decoration: kInputFieldStyle.copyWith(
+                                          labelText: 'Email',
+                                          prefixIcon: Icon(Icons.mail),
+                                        ),
+                                        keyboardType: TextInputType.emailAddress,
+                                        validator: (value) {
+                                          if(value.isEmpty) return 'Rellena este campo';
+                                          return null;
+                                        },
                                       ),
-                                    ),
-                                    TextField(
-                                      decoration: kInputFieldStyle.copyWith(
-                                        labelText: 'Contraseña',
-                                        prefixIcon: Icon(Icons.vpn_key),
+                                      TextFormField(
+                                        decoration: kInputFieldStyle.copyWith(
+                                          labelText: 'Contraseña',
+                                          prefixIcon: Icon(Icons.vpn_key),
+                                        ),
+                                        obscureText: true,
+                                        validator: (value) {
+                                          if(value.isEmpty) return 'Rellena este campo';
+                                          if(value.length < 6) return 'Al menos 6 caracteres';
+                                          return null;
+                                        },
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -100,6 +126,7 @@ class LoginScreen extends StatelessWidget {
                         style:
                             const TextStyle(color: Colors.white, fontSize: 20),
                       ),
+                      onTap: () => _validateAndSubmit(context),
                     ),
                   ],
                 ),
