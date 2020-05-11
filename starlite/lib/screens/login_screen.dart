@@ -7,12 +7,26 @@ import 'package:starlite/widgets/rounded_black_button.dart';
 class LoginScreen extends StatelessWidget {
   static const routeName = "loginScreen";
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
+  final Map<String, String> data = {
+    'email': null,
+    'password': null,
+  };
 
   _validateAndSubmit(BuildContext context) {
-    if(!this._form.currentState.validate()) return;
+    if (!this._form.currentState.validate()) return;
+
+    this._form.currentState.save();
+
+    final index = Provider.of<DataProvider>(context, listen: false)
+        .users
+        .indexWhere((user) =>
+            user['email'] == data['email'] &&
+            user['password'] == data['password']);
+    
+    if(index < 0) return;
 
     Navigator.of(context).pop();
-    Provider.of<DataProvider>(context, listen: false).login();
+    Provider.of<DataProvider>(context, listen: false).login(index);
   }
 
   @override
@@ -89,9 +103,13 @@ class LoginScreen extends StatelessWidget {
                                           labelText: 'Email',
                                           prefixIcon: Icon(Icons.mail),
                                         ),
-                                        keyboardType: TextInputType.emailAddress,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        onSaved: (value) =>
+                                            data['email'] = value,
                                         validator: (value) {
-                                          if(value.isEmpty) return 'Rellena este campo';
+                                          if (value.isEmpty)
+                                            return 'Rellena este campo';
                                           return null;
                                         },
                                       ),
@@ -100,10 +118,14 @@ class LoginScreen extends StatelessWidget {
                                           labelText: 'Contraseña',
                                           prefixIcon: Icon(Icons.vpn_key),
                                         ),
+                                        onSaved: (value) =>
+                                            data['password'] = value,
                                         obscureText: true,
                                         validator: (value) {
-                                          if(value.isEmpty) return 'Rellena este campo';
-                                          if(value.length < 6) return 'Al menos 6 caracteres';
+                                          if (value.isEmpty)
+                                            return 'Rellena este campo';
+                                          if (value.length < 6)
+                                            return 'Al menos 6 caracteres';
                                           return null;
                                         },
                                       ),
