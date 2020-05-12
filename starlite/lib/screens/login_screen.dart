@@ -12,6 +12,8 @@ class LoginScreen extends StatelessWidget {
     'password': null,
   };
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
   _validateAndSubmit(BuildContext context) {
     if (!this._form.currentState.validate()) return;
 
@@ -22,8 +24,16 @@ class LoginScreen extends StatelessWidget {
         .indexWhere((user) =>
             user['email'] == data['email'] &&
             user['password'] == data['password']);
-    
-    if(index < 0) return;
+
+    if (index < 0) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text('Email o contraseña incorrectos'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
 
     Navigator.of(context).pop();
     Provider.of<DataProvider>(context, listen: false).login(index);
@@ -33,6 +43,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final dimensions = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('Inicio de Sesión'),
       ),
