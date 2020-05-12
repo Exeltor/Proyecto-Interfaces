@@ -27,15 +27,18 @@ class _TabsScreenState extends State<TabsScreen>
           icon: Icon(Icons.search),
           onPressed: () {},
         ),
-      ]
+      ],
+      'scrolling': false,
     },
     {
       'screen': GastosScreen(),
       'title': 'Mis Gastos',
+      'scrolling': true,
     },
     {
       'screen': ComunidadScreen(),
       'title': 'Comunidad',
+      'scrolling': true,
     },
   ];
 
@@ -85,6 +88,7 @@ class _TabsScreenState extends State<TabsScreen>
       animation: controller,
       child: SingleChildScrollView(
         controller: _scrollController,
+        physics: _pageViews[_selectedScreen]['scrolling'] ? null : NeverScrollableScrollPhysics(),
         child: _pageViews[_selectedScreen]['screen'],
       ),
       builder: (context, child) => Scaffold(
@@ -102,8 +106,10 @@ class _TabsScreenState extends State<TabsScreen>
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedScreen,
           onTap: _selectPage,
+          backgroundColor: Colors.white,
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.black,
+          elevation: 0,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),

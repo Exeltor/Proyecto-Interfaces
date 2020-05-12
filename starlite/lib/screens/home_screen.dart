@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Container(
-            height: (deviceMedia.size.height / 2) - 60,
+            height: (deviceMedia.size.height / 2) - 56,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
