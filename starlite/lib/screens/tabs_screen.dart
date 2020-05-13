@@ -33,7 +33,7 @@ class _TabsScreenState extends State<TabsScreen>
     {
       'screen': GastosScreen(),
       'title': 'Mis Gastos',
-      'scrolling': true,
+      'scrolling': false,
     },
     {
       'screen': ComunidadScreen(),
@@ -86,11 +86,7 @@ class _TabsScreenState extends State<TabsScreen>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: controller,
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        physics: _pageViews[_selectedScreen]['scrolling'] ? null : NeverScrollableScrollPhysics(),
-        child: _pageViews[_selectedScreen]['screen'],
-      ),
+      child: _pageViews[_selectedScreen]['screen'],
       builder: (context, child) => Scaffold(
         appBar: AppBar(
           title: Text(
