@@ -21,7 +21,7 @@ class GastosScreen extends StatelessWidget {
           maxChildSize: 1,
           initialChildSize: 0.5,
           builder: (context, _scrollController) => Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),

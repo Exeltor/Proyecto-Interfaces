@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:starlite/screens/comunidad_screen.dart';
 import 'package:starlite/screens/gastos_screen.dart';
 import 'package:starlite/screens/home_screen.dart';
+import 'package:starlite/screens/search_screen.dart';
 import 'package:starlite/widgets/app_drawer.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -18,16 +19,11 @@ class _TabsScreenState extends State<TabsScreen>
   ScrollController _scrollController;
   bool _scrolledDown = false;
   int _selectedScreen = 0;
+
   List _pageViews = [
     {
       'screen': HomeScreen(),
       'title': 'Home',
-      'actions': [
-        IconButton(
-          icon: Icon(Icons.search),
-          onPressed: () {},
-        ),
-      ],
       'scrolling': false,
     },
     {
@@ -94,7 +90,14 @@ class _TabsScreenState extends State<TabsScreen>
             style: TextStyle(color: animationIconsText.value),
           ),
           backgroundColor: animationAppBar.value,
-          actions: _pageViews[_selectedScreen]['actions'],
+          actions: _selectedScreen == 0
+              ? [
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () => Navigator.of(context).pushNamed(SearchScreen.routeName),
+                  ),
+                ]
+              : null,
           iconTheme: IconThemeData(color: animationIconsText.value),
         ),
         drawer: AppDrawer(),
