@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:starlite/providers/data.dart';
+import 'package:starlite/screens/product_detail_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   static final routeName = '/search';
@@ -22,7 +24,9 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       this.products = Provider.of<DataProvider>(context, listen: false)
           .products
-          .where((product) => product["titulo"].toLowerCase().contains(searchString.toLowerCase()))
+          .where((product) => product["titulo"]
+              .toLowerCase()
+              .contains(searchString.toLowerCase()))
           .toList();
     });
   }
@@ -118,12 +122,31 @@ class ProductItem extends StatelessWidget {
               ),
             ],
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.network(
-              currentProduct['imagen'],
-              height: 200,
-              fit: BoxFit.cover,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailScreen(
+                    titulo: currentProduct['titulo'],
+                    descripcion: currentProduct['descripcion'],
+                    imagen: currentProduct['imagen'],
+                    precio: currentProduct['precio'],
+                  ),
+                ),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Hero(
+                  tag: currentProduct['imagen'],
+                  child: CachedNetworkImage(
+                    imageUrl: currentProduct['imagen'],
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
           ),
         ),
