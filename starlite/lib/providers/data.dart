@@ -21,6 +21,6 @@ class DataProvider with ChangeNotifier {
   logout() {
     this.isLoggedIn = false;
     currentUser = null;
-    this.notifyListeners();
+    notifyListeners();
   }
 }

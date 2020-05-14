@@ -8,6 +8,7 @@ class AppDrawer extends StatelessWidget {
         children: <Widget>[
           AppBar(
             title: const Text('Starlite'),
+            automaticallyImplyLeading: false,
           ),
           Divider(),
           ListTile(
