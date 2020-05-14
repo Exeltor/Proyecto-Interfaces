@@ -2,8 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:starlite/providers/data.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   static final routeName = '/search';
+
+  @override
+  _SearchScreenState createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  List<Map<String, dynamic>> products;
+
+  @override
+  void initState() {
+    products = Provider.of<DataProvider>(context, listen: false).products;
+    super.initState();
+  }
+
+  _filterSearch(String searchString) {
+    setState(() {
+      this.products = Provider.of<DataProvider>(context, listen: false)
+          .products
+          .where((product) => product["titulo"].toLowerCase().contains(searchString.toLowerCase()))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +55,7 @@ class SearchScreen extends StatelessWidget {
                     hintText: 'Tu búsqueda aqui',
                     prefixIcon: Icon(Icons.search),
                   ),
+                  onChanged: (value) => _filterSearch(value),
                 ),
               ),
             ),
@@ -56,33 +79,69 @@ class SearchScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: GridView.builder(
-                itemCount: Provider.of<DataProvider>(context, listen: false)
-                    .products
-                    .length,
+              child: ListView.builder(
+                itemCount: products.length,
                 padding: const EdgeInsets.all(20),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 3 / 2,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                ),
-                itemBuilder: (context, i) {
-                  final currentProduct =
-                      Provider.of<DataProvider>(context, listen: false)
-                          .products[i];
-                  return Container(
-                    child: Image.network(
-                      currentProduct['imagen'],
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                },
+                itemBuilder: (context, i) =>
+                    ProductItem(currentProduct: products[i]),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class ProductItem extends StatelessWidget {
+  const ProductItem({
+    Key key,
+    @required this.currentProduct,
+  }) : super(key: key);
+
+  final Map<String, dynamic> currentProduct;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black54,
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.network(
+              currentProduct['imagen'],
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          currentProduct['titulo'],
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          '€${currentProduct['precio']}',
+          style: const TextStyle(fontSize: 18),
+        ),
+        const SizedBox(height: 15),
+      ],
     );
   }
 }
