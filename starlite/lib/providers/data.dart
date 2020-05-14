@@ -84,6 +84,16 @@ class DataProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  addToFavorites(int user, int product) {
+    this.users[user]['metas'].add(product);
+    notifyListeners();
+  }
+
+  removeFavorites(int user, int product) {
+    this.users[user]['metas'].remove(product);
+    notifyListeners();
+  }
+
   logout() {
     this.isLoggedIn = false;
     currentUser = null;

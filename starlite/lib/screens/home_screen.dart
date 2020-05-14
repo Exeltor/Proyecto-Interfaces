@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:starlite/screens/search_screen.dart';
 import 'package:starlite/widgets/rounded_black_button.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -24,7 +25,7 @@ class HomeScreen extends StatelessWidget {
                   'Busca articulos',
                   style: TextStyle(color: Colors.white, fontSize: 22),
                 ),
-                onTap: () {},
+                onTap: () => Navigator.of(context).pushNamed(SearchScreen.routeName),
               ),
             ],
           ),

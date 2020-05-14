@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:starlite/providers/data.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   ProductDetailScreen({
+    this.index,
     this.titulo,
     this.descripcion,
     this.imagen,
@@ -10,35 +13,45 @@ class ProductDetailScreen extends StatelessWidget {
   });
 
   final String titulo, descripcion, imagen;
-  final int precio;
+  final int precio, index;
 
   @override
   Widget build(BuildContext context) {
+    print('building');
+    final userId =
+        Provider.of<DataProvider>(context, listen: false).currentUser;
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(
-            expandedHeight: 400,
-            leading: MaterialButton(
-              elevation: 0,
-              onPressed: () => Navigator.of(context).pop(),
-              color: Colors.black,
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
+          Selector<DataProvider, List>(
+            selector: (context, dataProvider) =>
+                dataProvider.users[userId]['metas'],
+            builder: (context, data, child) => SliverAppBar(
+              expandedHeight: 400,
+              leading: MaterialButton(
+                elevation: 0,
+                onPressed: () => Navigator.of(context).pop(),
+                color: Colors.black,
+                child: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+                shape: CircleBorder(),
               ),
-              shape: CircleBorder(),
-            ),
-            actions: <Widget>[
-              FavoriteButton(),
-            ],
-            flexibleSpace: FlexibleSpaceBar(
-              background: Hero(
-                tag: imagen,
-                child: CachedNetworkImage(
-                  imageUrl: imagen,
-                  fit: BoxFit.cover,
+              actions: <Widget>[
+                FavoriteButton(
+                  index: index,
+                  isFavorite: data.contains(index),
+                ),
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                background: Hero(
+                  tag: imagen,
+                  child: CachedNetworkImage(
+                    imageUrl: imagen,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -107,10 +120,17 @@ class ProductDetailScreen extends StatelessWidget {
 class FavoriteButton extends StatelessWidget {
   const FavoriteButton({
     Key key,
+    @required this.isFavorite,
+    @required this.index,
   }) : super(key: key);
+
+  final bool isFavorite;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
+    final userId =
+        Provider.of<DataProvider>(context, listen: false).currentUser;
     return Material(
       shape: const CircleBorder(),
       color: Colors.black,
@@ -118,9 +138,15 @@ class FavoriteButton extends StatelessWidget {
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Icon(Icons.favorite),
+          child: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border,
+          ),
         ),
-        onTap: () {},
+        onTap: isFavorite
+            ? Provider.of<DataProvider>(context, listen: false)
+                .removeFavorites(userId, index)
+            : Provider.of<DataProvider>(context, listen: false)
+                .addToFavorites(userId, index),
       ),
     );
   }

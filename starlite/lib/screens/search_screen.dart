@@ -86,8 +86,10 @@ class _SearchScreenState extends State<SearchScreen> {
               child: ListView.builder(
                 itemCount: products.length,
                 padding: const EdgeInsets.all(20),
-                itemBuilder: (context, i) =>
-                    ProductItem(currentProduct: products[i]),
+                itemBuilder: (context, i) => ProductItem(
+                  currentProduct: products[i],
+                  index: i,
+                ),
               ),
             ),
           ),
@@ -101,9 +103,11 @@ class ProductItem extends StatelessWidget {
   const ProductItem({
     Key key,
     @required this.currentProduct,
+    @required this.index,
   }) : super(key: key);
 
   final Map<String, dynamic> currentProduct;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +133,7 @@ class ProductItem extends StatelessWidget {
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ProductDetailScreen(
+                    index: index,
                     titulo: currentProduct['titulo'],
                     descripcion: currentProduct['descripcion'],
                     imagen: currentProduct['imagen'],
