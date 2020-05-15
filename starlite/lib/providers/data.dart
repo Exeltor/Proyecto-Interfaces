@@ -134,12 +134,15 @@ class DataProvider with ChangeNotifier {
 
     if (ratio <= 1) {
       users[userId]['metas']['inmediato'].add(productIndex);
+      notifyListeners();
       return Plazo.inmediato;
     } else if (ratio > 1 && ratio <= users[userId]['plazos']['largo']) {
       users[userId]['metas']['corto'].add(productIndex);
+      notifyListeners();
       return Plazo.corto;
     } else {
       users[userId]['metas']['largo'].add(productIndex);
+      notifyListeners();
       return Plazo.largo;
     }
   }
