@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:starlite/providers/data.dart';
 import 'package:starlite/screens/search_screen.dart';
+import 'package:starlite/widgets/card_list_item.dart';
 import 'package:starlite/widgets/rounded_black_button.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,78 +16,137 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceMedia = MediaQuery.of(context);
-    return Consumer<DataProvider>(
-      builder: (context, data, child) => Stack(
-        children: <Widget>[
-          Container(
-            height: (deviceMedia.size.height / 2) -
-                Scaffold.of(context).appBarMaxHeight,
-            width: double.infinity,
+    final data = Provider.of<DataProvider>(context);
+    final List joinedItems = [
+      ...data.users[data.currentUser]['metas']['inmediato'],
+      ...data.users[data.currentUser]['metas']['corto'],
+      ...data.users[data.currentUser]['metas']['largo'],
+    ];
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: (deviceMedia.size.height / 2) -
+              Scaffold.of(context).appBarMaxHeight,
+          width: double.infinity,
+          child: data.users[data.currentUser]['metas']['inmediato']
+                      .isNotEmpty ||
+                  data.users[data.currentUser]['metas']['corto'].isNotEmpty ||
+                  data.users[data.currentUser]['metas']['largo'].isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        'Tu proxima meta',
+                        style: const TextStyle(fontSize: 22),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: NextGoal(
+                          productIndex: _selectNextGoal(
+                            data.users[data.currentUser]['metas'],
+                          ),
+                        ),
+                      ),
+                      TermsRow(
+                        data: data,
+                      )
+                    ],
+                  ),
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'No tienes ninguna meta aun',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    const SizedBox(height: 10),
+                    RoundedBlackButton(
+                      child: Text(
+                        'Busca articulos',
+                        style: TextStyle(color: Colors.white, fontSize: 22),
+                      ),
+                      onTap: () => Navigator.of(context)
+                          .pushNamed(SearchScreen.routeName),
+                    ),
+                  ],
+                ),
+        ),
+        DraggableScrollableSheet(
+          initialChildSize: 0.5,
+          minChildSize: 0.5,
+          maxChildSize: 1,
+          builder: (context, _scrollController) => Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black54,
+                  blurRadius: 10,
+                ),
+              ],
+            ),
             child: data.users[data.currentUser]['metas']['inmediato']
                         .isNotEmpty ||
                     data.users[data.currentUser]['metas']['corto'].isNotEmpty ||
                     data.users[data.currentUser]['metas']['largo'].isNotEmpty
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Text(
-                          'Tu proxima meta',
+                ? ListView.separated(
+                    controller: _scrollController,
+                    separatorBuilder: (context, i) =>
+                        const SizedBox(height: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 20),
+                    itemCount: joinedItems.length,
+                    itemBuilder: (context, i) {
+                      final product = data.products[joinedItems[i]];
+
+                      return CardListItem(
+                        leading: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: CachedNetworkImageProvider(
+                            product['imagen'],
+                          ),
+                          backgroundColor: Colors.transparent,
+                        ),
+                        title: Text(
+                          product['titulo'],
                           style: const TextStyle(fontSize: 22),
                         ),
-                        Expanded(
-                            flex: 2,
-                            child: NextGoal(
-                                productIndex: _selectNextGoal(
-                                    data.users[data.currentUser]['metas']))),
-                        TermsRow(
-                          data: data,
-                        )
+                        subtitle: Text(
+                          '€${product['precio']}',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        trailing: Container(),
+                      );
+                    },
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Vacio',
+                          style: const TextStyle(
+                              fontSize: 26, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '¡Aqui veras estadisticas interesantes una vez que añadas articulos!',
+                          style: const TextStyle(fontSize: 22),
+                        ),
                       ],
                     ),
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'No tienes ninguna meta aun',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      const SizedBox(height: 10),
-                      RoundedBlackButton(
-                        child: Text(
-                          'Busca articulos',
-                          style: TextStyle(color: Colors.white, fontSize: 22),
-                        ),
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(SearchScreen.routeName),
-                      ),
-                    ],
                   ),
           ),
-          DraggableScrollableSheet(
-            initialChildSize: 0.5,
-            minChildSize: 0.5,
-            maxChildSize: 1,
-            builder: (context, _scrollController) => Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black54,
-                    blurRadius: 10,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

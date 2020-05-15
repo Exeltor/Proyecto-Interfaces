@@ -20,20 +20,27 @@ class CardListItem extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          leading,
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              title,
-              const SizedBox(height: 10),
-              subtitle,
-            ],
-          ),
-          trailing,
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            leading,
+            const SizedBox(width: 20),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  title,
+                  const SizedBox(height: 10),
+                  subtitle,
+                ],
+              ),
+            ),
+            trailing,
+          ],
+        ),
       ),
     );
   }
