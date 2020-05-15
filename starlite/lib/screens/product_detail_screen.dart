@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:starlite/providers/data.dart';
+import 'package:starlite/widgets/custom_dialog.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   ProductDetailScreen({
@@ -12,46 +13,61 @@ class ProductDetailScreen extends StatelessWidget {
     this.precio,
   });
 
+  _addGoal(BuildContext context) {
+    final userId = Provider.of<DataProvider>(context, listen: false).currentUser;
+    Plazo result = Provider.of<DataProvider>(context, listen: false).addGoal(userId, index);
+    String term;
+    if(result == Plazo.inmediato)
+      term = 'Inmediato';
+    else if(result == Plazo.corto)
+      term = 'Corto';
+    else if(result == Plazo.largo)
+      term = 'Largo';
+
+    showDialog(
+      context: context,
+      builder: (context) => CustomDialog(
+        title: term != null ? '¡Articulo añadido!' : 'No se ha podido añadir',
+        description: term != null ? 'Tu articulo ha sido añadido a la a categoria $term' : 'El articulo ya esta añadido',
+        buttonText: 'Salir',
+        error: term == null,
+      ),
+    );
+  }
+
   final String titulo, descripcion, imagen;
   final int precio, index;
 
   @override
   Widget build(BuildContext context) {
-    print('building');
-    final userId =
-        Provider.of<DataProvider>(context, listen: false).currentUser;
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: <Widget>[
-          Selector<DataProvider, List>(
-            selector: (context, dataProvider) =>
-                dataProvider.users[userId]['metas'],
-            builder: (context, data, child) => SliverAppBar(
-              expandedHeight: 400,
-              leading: MaterialButton(
-                elevation: 0,
-                onPressed: () => Navigator.of(context).pop(),
-                color: Colors.black,
-                child: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-                shape: CircleBorder(),
+          SliverAppBar(
+            expandedHeight: 400,
+            leading: MaterialButton(
+              elevation: 0,
+              onPressed: () => Navigator.of(context).pop(),
+              color: Colors.black,
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
               ),
-              actions: <Widget>[
-                FavoriteButton(
-                  index: index,
-                  isFavorite: data.contains(index),
-                ),
-              ],
-              flexibleSpace: FlexibleSpaceBar(
-                background: Hero(
-                  tag: imagen,
-                  child: CachedNetworkImage(
-                    imageUrl: imagen,
-                    fit: BoxFit.cover,
-                  ),
+              shape: CircleBorder(),
+            ),
+            actions: <Widget>[
+              AppBarActionButton(
+                onPressed: () => _addGoal(context),
+                icon: Icons.add,
+              ),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              background: Hero(
+                tag: imagen,
+                child: CachedNetworkImage(
+                  imageUrl: imagen,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -92,7 +108,7 @@ class ProductDetailScreen extends StatelessWidget {
                         '# Personas estan ahorrando para este articulo',
                         style: const TextStyle(fontSize: 16),
                       ),
-                      const SizedBox(height: 10),
+                      Divider(),
                       const Text(
                         'Descripción',
                         style: const TextStyle(
@@ -117,20 +133,14 @@ class ProductDetailScreen extends StatelessWidget {
   }
 }
 
-class FavoriteButton extends StatelessWidget {
-  const FavoriteButton({
-    Key key,
-    @required this.isFavorite,
-    @required this.index,
-  }) : super(key: key);
+class AppBarActionButton extends StatelessWidget {
+  final Function onPressed;
+  final IconData icon;
 
-  final bool isFavorite;
-  final int index;
+  const AppBarActionButton({@required this.onPressed, @required this.icon});
 
   @override
   Widget build(BuildContext context) {
-    final userId =
-        Provider.of<DataProvider>(context, listen: false).currentUser;
     return Material(
       shape: const CircleBorder(),
       color: Colors.black,
@@ -139,14 +149,11 @@ class FavoriteButton extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Icon(
-            isFavorite ? Icons.favorite : Icons.favorite_border,
+            icon,
+            color: Colors.white,
           ),
         ),
-        onTap: isFavorite
-            ? Provider.of<DataProvider>(context, listen: false)
-                .removeFavorites(userId, index)
-            : Provider.of<DataProvider>(context, listen: false)
-                .addToFavorites(userId, index),
+        onTap: onPressed,
       ),
     );
   }
