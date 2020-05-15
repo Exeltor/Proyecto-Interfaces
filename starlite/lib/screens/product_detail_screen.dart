@@ -1,16 +1,42 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:starlite/providers/data.dart';
+import 'package:starlite/widgets/custom_dialog.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   ProductDetailScreen({
+    this.index,
     this.titulo,
     this.descripcion,
     this.imagen,
     this.precio,
   });
 
+  _addGoal(BuildContext context) {
+    final userId = Provider.of<DataProvider>(context, listen: false).currentUser;
+    Plazo result = Provider.of<DataProvider>(context, listen: false).addGoal(userId, index);
+    String term;
+    if(result == Plazo.inmediato)
+      term = 'Inmediato';
+    else if(result == Plazo.corto)
+      term = 'Corto';
+    else if(result == Plazo.largo)
+      term = 'Largo';
+
+    showDialog(
+      context: context,
+      builder: (context) => CustomDialog(
+        title: term != null ? '¡Articulo añadido!' : 'No se ha podido añadir',
+        description: term != null ? 'Tu articulo ha sido añadido a la a categoria $term' : 'El articulo ya esta añadido',
+        buttonText: 'Salir',
+        error: term == null,
+      ),
+    );
+  }
+
   final String titulo, descripcion, imagen;
-  final int precio;
+  final int precio, index;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +57,10 @@ class ProductDetailScreen extends StatelessWidget {
               shape: CircleBorder(),
             ),
             actions: <Widget>[
-              FavoriteButton(),
+              AppBarActionButton(
+                onPressed: () => _addGoal(context),
+                icon: Icons.add,
+              ),
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
@@ -79,7 +108,7 @@ class ProductDetailScreen extends StatelessWidget {
                         '# Personas estan ahorrando para este articulo',
                         style: const TextStyle(fontSize: 16),
                       ),
-                      const SizedBox(height: 10),
+                      Divider(),
                       const Text(
                         'Descripción',
                         style: const TextStyle(
@@ -104,10 +133,11 @@ class ProductDetailScreen extends StatelessWidget {
   }
 }
 
-class FavoriteButton extends StatelessWidget {
-  const FavoriteButton({
-    Key key,
-  }) : super(key: key);
+class AppBarActionButton extends StatelessWidget {
+  final Function onPressed;
+  final IconData icon;
+
+  const AppBarActionButton({@required this.onPressed, @required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -118,9 +148,12 @@ class FavoriteButton extends StatelessWidget {
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Icon(Icons.favorite),
+          child: Icon(
+            icon,
+            color: Colors.white,
+          ),
         ),
-        onTap: () {},
+        onTap: onPressed,
       ),
     );
   }
