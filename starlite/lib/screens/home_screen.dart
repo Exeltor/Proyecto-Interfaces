@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:starlite/providers/data.dart';
 import 'package:starlite/screens/product_detail_screen.dart';
 import 'package:starlite/screens/search_screen.dart';
+import 'package:starlite/screens/term_detail_screen.dart';
 import 'package:starlite/widgets/card_list_item.dart';
 import 'package:starlite/widgets/rounded_black_button.dart';
 
@@ -181,14 +182,29 @@ class TermsRow extends StatelessWidget {
         TermsCountCategory(
           value: data.users[data.currentUser]['metas']['inmediato'].length,
           name: 'Inmed.',
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => TermDetailScreen(Plazo.inmediato),
+            ),
+          ),
         ),
         TermsCountCategory(
           value: data.users[data.currentUser]['metas']['corto'].length,
           name: 'Corto',
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => TermDetailScreen(Plazo.corto),
+            ),
+          ),
         ),
         TermsCountCategory(
           value: data.users[data.currentUser]['metas']['largo'].length,
           name: 'Largo',
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => TermDetailScreen(Plazo.largo),
+            ),
+          ),
         ),
       ],
     );
@@ -255,15 +271,16 @@ class NextGoal extends StatelessWidget {
 }
 
 class TermsCountCategory extends StatelessWidget {
-  TermsCountCategory({this.name, this.value});
+  TermsCountCategory({this.name, this.value, this.onTap});
 
   final String name;
   final int value;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      onPressed: () {},
+      onPressed: onTap,
       child: Column(
         children: <Widget>[
           Text(

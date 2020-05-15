@@ -147,6 +147,11 @@ class DataProvider with ChangeNotifier {
     }
   }
 
+  deleteGoal(int goalId, String goalTerm) {
+    users[currentUser]['metas'][goalTerm].remove(goalId);
+    notifyListeners();
+  } 
+
   logout() {
     this.isLoggedIn = false;
     currentUser = null;
