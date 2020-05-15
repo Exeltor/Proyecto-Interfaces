@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:starlite/providers/data.dart';
+import 'package:starlite/screens/product_detail_screen.dart';
 import 'package:starlite/screens/search_screen.dart';
 import 'package:starlite/widgets/card_list_item.dart';
 import 'package:starlite/widgets/rounded_black_button.dart';
@@ -114,15 +115,28 @@ class HomeScreen extends StatelessWidget {
                           ),
                           backgroundColor: Colors.transparent,
                         ),
-                        title: Text(
-                          product['titulo'],
-                          style: const TextStyle(fontSize: 22),
+                        title: FittedBox(
+                          child: Text(
+                            product['titulo'],
+                            style: const TextStyle(fontSize: 22),
+                          ),
                         ),
                         subtitle: Text(
                           '€${product['precio']}',
                           style: const TextStyle(fontSize: 18),
                         ),
                         trailing: Container(),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailScreen(
+                              descripcion: product['descripcion'],
+                              imagen: product['imagen'],
+                              precio: product['precio'],
+                              titulo: product['titulo'],
+                              index: joinedItems[i],
+                            ),
+                          ),
+                        ),
                       );
                     },
                   )
@@ -248,22 +262,25 @@ class TermsCountCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(
-          '$value',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 50,
+    return FlatButton(
+      onPressed: () {},
+      child: Column(
+        children: <Widget>[
+          Text(
+            '$value',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 50,
+            ),
           ),
-        ),
-        Text(
-          name,
-          style: const TextStyle(
-            fontSize: 20,
+          Text(
+            name,
+            style: const TextStyle(
+              fontSize: 20,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
