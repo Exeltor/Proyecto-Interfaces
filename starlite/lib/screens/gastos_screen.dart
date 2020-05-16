@@ -1,8 +1,25 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:starlite/widgets/card_list_item.dart';
 import 'package:starlite/widgets/chart.dart';
 
-class GastosScreen extends StatelessWidget {
+class GastosScreen extends StatefulWidget {
+  @override
+  _GastosScreenState createState() => _GastosScreenState();
+}
+
+class _GastosScreenState extends State<GastosScreen> {
+  final faker = Faker();
+  List<Map<String, dynamic>> _dishList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    for(int i = 0; i < 50; i++) {
+      _dishList.add({'name': faker.food.dish(), 'amount': faker.randomGenerator.decimal() * 100});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceMedia = MediaQuery.of(context);
@@ -37,21 +54,21 @@ class GastosScreen extends StatelessWidget {
             child: ListView.separated(
               controller: _scrollController,
               separatorBuilder: (context, i) => const SizedBox(height: 20),
-              itemCount: 50,
+              itemCount: _dishList.length,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               itemBuilder: (context, i) => CardListItem(
                 leading: CircleAvatar(
                   radius: 25,
                 ),
                 title: Text(
-                  'Titulo compra',
+                  _dishList[i]['name'],
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
-                  '€${i + 1}',
+                  '€${_dishList[i]['amount'].toStringAsFixed(2)}',
                   style: const TextStyle(fontSize: 20),
                 ),
                 trailing: Text('10:36', style: const TextStyle(fontSize: 18)),
