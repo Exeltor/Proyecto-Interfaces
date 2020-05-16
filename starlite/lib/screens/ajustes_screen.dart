@@ -34,7 +34,8 @@ class _AjustesScreenState extends State<AjustesScreen> {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             )
           ]),
-          SwitchListTile(
+          SwitchListTile.adaptive(
+              activeColor: Colors.deepPurple,
               title: Text(
                 "Recibir promociones especiales",
                 style: TextStyle(fontSize: 15),
@@ -85,39 +86,19 @@ class _AjustesScreenState extends State<AjustesScreen> {
             title: Text("Inmediato", style: TextStyle(fontSize: 15)),
             trailing: Container(
               width: 200,
-              child: SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: Colors.deepPurple,
-                  inactiveTrackColor: Colors.purpleAccent,
-                  trackShape: RoundedRectSliderTrackShape(),
-                  trackHeight: 1.0,
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
-                  thumbColor: Colors.deepPurple,
-                  overlayColor: Colors.red.withAlpha(32),
-                  overlayShape: RoundSliderOverlayShape(overlayRadius: 28.0),
-                  tickMarkShape: RoundSliderTickMarkShape(),
-                  activeTickMarkColor: Colors.deepPurple,
-                  inactiveTickMarkColor: Colors.deepPurple,
-                  valueIndicatorShape: PaddleSliderValueIndicatorShape(),
-                  valueIndicatorColor: Colors.deepPurple,
-                  valueIndicatorTextStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                child: Slider(
-                  value: _value,
-                  min: 1,
-                  max: 5,
-                  divisions: 4,
-                  label: '$_value',
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        _value = value;
-                      },
-                    );
-                  },
-                ),
+              child: Slider(
+                value: _value,
+                min: 1,
+                max: 5,
+                divisions: 4,
+                label: '$_value',
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _value = value;
+                    },
+                  );
+                },
               ),
             ),
           ),
@@ -126,39 +107,19 @@ class _AjustesScreenState extends State<AjustesScreen> {
             title: Text("Medio Plazo", style: TextStyle(fontSize: 15)),
             trailing: Container(
               width: 200,
-              child: SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: Colors.deepPurple,
-                  inactiveTrackColor: Colors.purpleAccent,
-                  trackShape: RoundedRectSliderTrackShape(),
-                  trackHeight: 1.0,
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
-                  thumbColor: Colors.deepPurple,
-                  overlayColor: Colors.red.withAlpha(32),
-                  overlayShape: RoundSliderOverlayShape(overlayRadius: 28.0),
-                  tickMarkShape: RoundSliderTickMarkShape(),
-                  activeTickMarkColor: Colors.deepPurple,
-                  inactiveTickMarkColor: Colors.deepPurple,
-                  valueIndicatorShape: PaddleSliderValueIndicatorShape(),
-                  valueIndicatorColor: Colors.deepPurple,
-                  valueIndicatorTextStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                child: Slider(
-                  value: _value1,
-                  min: 5,
-                  max: 50,
-                  divisions: 10,
-                  label: '$_value1',
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        _value1 = value;
-                      },
-                    );
-                  },
-                ),
+              child: Slider(
+                value: _value1,
+                min: 5,
+                max: 50,
+                divisions: 10,
+                label: '$_value1',
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _value1 = value;
+                    },
+                  );
+                },
               ),
             ),
           ),
@@ -167,39 +128,19 @@ class _AjustesScreenState extends State<AjustesScreen> {
             title: Text("Largo Plazo", style: TextStyle(fontSize: 15)),
             trailing: Container(
               width: 200,
-              child: SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: Colors.deepPurple,
-                  inactiveTrackColor: Colors.purpleAccent,
-                  trackShape: RoundedRectSliderTrackShape(),
-                  trackHeight: 1.0,
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
-                  thumbColor: Colors.deepPurple,
-                  overlayColor: Colors.red.withAlpha(32),
-                  overlayShape: RoundSliderOverlayShape(overlayRadius: 28.0),
-                  tickMarkShape: RoundSliderTickMarkShape(),
-                  activeTickMarkColor: Colors.deepPurple,
-                  inactiveTickMarkColor: Colors.deepPurple,
-                  valueIndicatorShape: PaddleSliderValueIndicatorShape(),
-                  valueIndicatorColor: Colors.deepPurple,
-                  valueIndicatorTextStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                child: Slider(
-                  value: _value2,
-                  min: 5,
-                  max: 50,
-                  divisions: 10,
-                  label: '$_value2',
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        _value2 = value;
-                      },
-                    );
-                  },
-                ),
+              child: Slider(
+                value: _value2,
+                min: 5,
+                max: 50,
+                divisions: 10,
+                label: '$_value2',
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _value2 = value;
+                    },
+                  );
+                },
               ),
             ),
           ),
