@@ -5,6 +5,7 @@ import 'package:starlite/providers/data.dart';
 import 'package:starlite/screens/ajustes_screen.dart';
 import 'package:starlite/screens/login_screen.dart';
 import 'package:starlite/screens/recovery_screen.dart';
+import 'package:starlite/screens/search_screen.dart';
 import 'package:starlite/screens/signup_screen.dart';
 import 'package:starlite/screens/start_screen.dart';
 import 'package:starlite/screens/tabs_screen.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           RecoveryScreen.routeName: (context) => RecoveryScreen(),
           TabsScreen.routeName: (context) => TabsScreen(),
           AjustesScreen.routeName: (context) => AjustesScreen(),
+          SearchScreen.routeName: (context) => SearchScreen(),
         },
       ),
     );
