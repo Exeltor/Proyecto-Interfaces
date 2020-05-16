@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:starlite/providers/data.dart';
+import 'package:starlite/screens/ajustes_screen.dart';
 import 'package:starlite/screens/login_screen.dart';
 import 'package:starlite/screens/recovery_screen.dart';
 import 'package:starlite/screens/search_screen.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
           SignupScreen.routeName: (context) => SignupScreen(),
           RecoveryScreen.routeName: (context) => RecoveryScreen(),
           TabsScreen.routeName: (context) => TabsScreen(),
+          AjustesScreen.routeName: (context) => AjustesScreen(),
           SearchScreen.routeName: (context) => SearchScreen(),
         },
       ),

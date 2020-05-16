@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:starlite/screens/ajustes_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:starlite/providers/data.dart';
 
@@ -16,7 +17,8 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.settings),
             title: const Text('Opciones'),
-            onTap: () {},
+            onTap: () =>
+                Navigator.of(context).pushNamed(AjustesScreen.routeName),
           ),
           Divider(),
           ListTile(
