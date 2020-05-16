@@ -147,6 +147,16 @@ class DataProvider with ChangeNotifier {
     }
   }
 
+  register(String email, String password) {
+    users.add({
+      'email': email,
+      'password': password,
+      'metas': {'inmediato': [], 'corto': [], 'largo': []},
+      'ingresoMensual': 50,
+      'plazos': {'inmediato': 0, 'corto': 1, 'largo': 4},
+    });
+  }
+
   deleteGoal(int goalId, String goalTerm) {
     users[currentUser]['metas'][goalTerm].remove(goalId);
     notifyListeners();

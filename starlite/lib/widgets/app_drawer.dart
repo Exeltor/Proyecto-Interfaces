@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:starlite/providers/data.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -20,7 +22,10 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: const Text('Cerrar sesion'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pop();
+              Provider.of<DataProvider>(context, listen: false).logout();
+            },
           ),
         ],
       ),
