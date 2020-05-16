@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:starlite/constants/styles.dart';
+import 'package:starlite/providers/data.dart';
 import 'package:starlite/widgets/rounded_black_button.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -14,7 +16,7 @@ class _SignupScreenState extends State<SignupScreen> {
   bool loading = false;
   bool registered = false;
   final _form = GlobalKey<FormState>();
-  String _pass1;
+  String _pass1, _username, _email;
 
   @override
   void initState() {
@@ -30,9 +32,13 @@ class _SignupScreenState extends State<SignupScreen> {
   _register() async {
     if (!_form.currentState.validate()) return;
 
+    _form.currentState.save();
+
     setState(() {
       loading = true;
     });
+
+    Provider.of<DataProvider>(context, listen: false).register(_email, _pass1);
 
     await Future.delayed(Duration(seconds: 2));
 
@@ -119,6 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   return 'Este campo es obligatorio';
                                 return null;
                               },
+                              onSaved: (newValue) => _username = newValue,
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
@@ -126,11 +133,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                 labelText: 'Email',
                                 prefixIcon: Icon(Icons.mail),
                               ),
+                              keyboardType: TextInputType.emailAddress,
                               validator: (value) {
                                 if (value.isEmpty)
                                   return 'Este campo es obligatorio';
                                 return null;
                               },
+                              onSaved: (newValue) => _email = newValue,
                             ),
                             const SizedBox(height: 10),
                             TextFormField(
@@ -143,7 +152,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               validator: (value) {
                                 if (value.isEmpty)
                                   return 'Este campo es obligatorio';
-                                if(value.length < 6) return 'Introduce al menos 6 carácteres';
+                                if (value.length < 6)
+                                  return 'Introduce al menos 6 carácteres';
                                 return null;
                               },
                             ),
@@ -157,7 +167,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               validator: (value) {
                                 if (value.isEmpty)
                                   return 'Este campo es obligatorio';
-                                if (value != _pass1) return 'Las contraseñas no coinciden';
+                                if (value != _pass1)
+                                  return 'Las contraseñas no coinciden';
                                 return null;
                               },
                             ),
@@ -167,6 +178,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 'Registro',
                                 style: TextStyle(
                                   color: Colors.white,
+                                  fontSize: 22,
                                 ),
                               ),
                               onTap: _register,
